@@ -18,7 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain( MasterPasswordAuthenticationProvider masterPass,
+                                                    HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .authorizeHttpRequests(custom -> {
                     custom.requestMatchers("/public").permitAll();
@@ -26,6 +27,7 @@ public class SecurityConfiguration {
                 })
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
+                .authenticationProvider(masterPass)
                 .build();
     }
 

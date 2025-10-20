@@ -2,6 +2,7 @@ package br.com.expert_security.api;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ public class FullController {
     }
 
     @GetMapping("/private")
-    public ResponseEntity<String> privateRoute(){
-        return ResponseEntity.ok("Private route ok");
+    public ResponseEntity<String> privateRoute(Authentication authentication){
+        return ResponseEntity.ok("Private route ok, usuario conectado: " + authentication.getName());
     }
 }
