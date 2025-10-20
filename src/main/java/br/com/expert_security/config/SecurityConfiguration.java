@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,7 +20,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain( MasterPasswordAuthenticationProvider masterPass,
-                                                    HttpSecurity httpSecurity) throws Exception{
+                                                    HttpSecurity httpSecurity, CustomFilter customFilter) throws Exception{
         return httpSecurity
                 .authorizeHttpRequests(custom -> {
                     custom.requestMatchers("/public").permitAll();
@@ -28,6 +29,7 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(masterPass)
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
