@@ -27,6 +27,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain( MasterPasswordAuthenticationProvider masterPass,
+                                                    CustomAuthenticationProvider customAuthenticationProvider,
                                                     HttpSecurity httpSecurity, CustomFilter customFilter) throws Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(masterPass)
+                .authenticationProvider(customAuthenticationProvider)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
