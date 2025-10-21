@@ -42,4 +42,17 @@ public class UsersService {
 
         return users;
     }
+
+    public Users getUserWithPermissions(String login){
+        Optional<Users> usersOptional = usersRepository.findByLogin(login);
+        if(usersOptional.isEmpty()){
+            return null;
+        }
+
+        Users user = usersOptional.get();
+        List<String> permissionsByUsers = usersGroupRepository.findPermissionsByUsers(user);
+        user.setPermissions(permissionsByUsers);
+
+        return user;
+    }
 }
