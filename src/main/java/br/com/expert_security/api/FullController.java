@@ -18,4 +18,9 @@ public class FullController {
     public ResponseEntity<String> privateRoute(Authentication authentication){
         return ResponseEntity.ok("Private route ok, usuario conectado: " + authentication.getName());
     }
+    @GetMapping("/admin")
+    public ResponseEntity<String> adminRoute(){
+        return ResponseEntity.ok("Admin route ok");
+    }
+
 }

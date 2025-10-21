@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,12 +19,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    // role -> perfil de usuario -> ADMIN, USER, GERENTE...
+    // authority -> permissão para cadastrar usuarios, visualizar relatorios...
+
     @Bean
     public SecurityFilterChain securityFilterChain( MasterPasswordAuthenticationProvider masterPass,
                                                     HttpSecurity httpSecurity, CustomFilter customFilter) throws Exception{
         return httpSecurity
                 .authorizeHttpRequests(custom -> {
                     custom.requestMatchers("/public").permitAll();
+                    custom.requestMatchers("/admin").hasRole("ADMIN");
                     custom.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
@@ -53,5 +58,10 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults(){
+        return new GrantedAuthorityDefaults("");
     }
 }
