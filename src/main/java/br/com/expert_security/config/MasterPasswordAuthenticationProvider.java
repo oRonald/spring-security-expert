@@ -1,5 +1,7 @@
 package br.com.expert_security.config;
 
+import br.com.expert_security.domain.security.CustomAuthentication;
+import br.com.expert_security.domain.security.UsersIdentification;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,9 +23,9 @@ public class MasterPasswordAuthenticationProvider implements AuthenticationProvi
         String masterePass = "@321";
 
         if(masterLogin.equals(login) && masterePass.equals(password)){
-            return new UsernamePasswordAuthenticationToken("I'm master",
-                    null,
-                    List.of(new SimpleGrantedAuthority("ADMIN")));
+            UsersIdentification usersIdentification = new UsersIdentification("master",
+                    "master", masterLogin, List.of("ADMIN"));
+            return new CustomAuthentication(usersIdentification);
         }
 
         return null;

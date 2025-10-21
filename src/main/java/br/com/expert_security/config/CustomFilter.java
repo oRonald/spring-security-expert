@@ -1,5 +1,7 @@
 package br.com.expert_security.config;
 
+import br.com.expert_security.domain.security.CustomAuthentication;
+import br.com.expert_security.domain.security.UsersIdentification;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +25,13 @@ public class CustomFilter extends OncePerRequestFilter {
         String secretHeader = request.getHeader("x-secret");
         if(secretHeader != null){
             if (secretHeader.equals("secr3t")) {
-                Authentication authentication = new UsernamePasswordAuthenticationToken("Secret", null,
-                        List.of(new SimpleGrantedAuthority("USER")));
-
+                var usersIdentification = new UsersIdentification(
+                        "id-secret",
+                        "secret",
+                        "x-secret",
+                        List.of("USER")
+                );
+                Authentication authentication = new CustomAuthentication(usersIdentification);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
