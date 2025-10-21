@@ -3,6 +3,7 @@ package br.com.expert_security.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
     // role -> perfil de usuario -> ADMIN, USER, GERENTE...
@@ -28,7 +30,6 @@ public class SecurityConfiguration {
         return httpSecurity
                 .authorizeHttpRequests(custom -> {
                     custom.requestMatchers("/public").permitAll();
-                    custom.requestMatchers("/admin").hasRole("ADMIN");
                     custom.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
